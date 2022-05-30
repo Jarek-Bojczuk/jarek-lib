@@ -8,7 +8,7 @@ workflows:
   test-build-run:
     jobs:
     - test-unittests:
-        context: fdt-dev-pipeline-build-context
+        context: circleci-build-context
 
 jobs:
   test-unittests:
