@@ -26,7 +26,7 @@ jobs:
             echo -e "[distutils]" >> ~/.pypirc
             echo -e "index-servers = finance-pypi-dev" >> ~/.pypirc
             echo -e "[finance-pypi-dev]" >> ~/.pypirc
-            echo -e "repository: https://monacohq-finance-docker-dev.jfrog.io/finance-pypi-dev" >> ~/.pypirc
+            echo -e "repository: https://monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-dev" >> ~/.pypirc
             echo -e "username: $ARTIFACTORY_USER" >> ~/.pypirc
             echo -e "password: $ARTIFACTORY_API_KEY" >> ~/.pypirc
             cat ~/.pypirc
