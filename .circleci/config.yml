@@ -31,5 +31,8 @@ jobs:
             echo -e "password: $ARTIFACTORY_API_KEY" >> ~/.pypirc
             cat ~/.pypirc
       - run:
-          name: Deploy library
-          command: python3 setup.py bdist_wheel upload -r finance-pypi-dev
+          name: Build library
+          command: python3 setup.py bdist_wheel
+      - run:
+          name: Publish
+          command: twine upload -r finance-pypi-dev dist/*
