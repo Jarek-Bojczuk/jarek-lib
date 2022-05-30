@@ -1,0 +1,34 @@
+version: 2.1
+
+orbs:
+  artifactory: circleci/artifactory@1.0.0
+
+workflows:
+  version: 2
+  test-build-run:
+    jobs:
+    - test-unittests:
+        context: fdt-dev-pipeline-build-context
+
+jobs:
+  test-unittests:
+    docker:
+      - image: cimg/python:3.10.2
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: Download dependencies
+          command: pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-dev/simple
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[distutils]" >> ~/.pypirc
+            echo -e "index-servers = finance-pypi-dev" >> ~/.pypirc
+            echo -e "[finance-pypi-dev]" >> ~/.pypirc
+            echo -e "repository: https://monacohq-finance-docker-dev.jfrog.io/finance-pypi-dev" >> ~/.pypirc
+            echo -e "username: $ARTIFACTORY_USER" >> ~/.pypirc
+            echo -e "password: $ARTIFACTORY_API_KEY" >> ~/.pypirc
+      - run:
+          name: Deploy library
+          command: python3 setup.py bdist_wheel upload -r finance-pypi-dev
