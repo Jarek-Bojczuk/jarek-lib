@@ -37,4 +37,4 @@ jobs:
           command: python3 setup.py bdist_wheel
       - run:
           name: Publish
-          command: twine upload -r finance-pypi-dev dist/*
+          command: twine upload -r ${PYPI_REPOSITORY} dist/*
