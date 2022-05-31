@@ -12,6 +12,9 @@ workflows:
 
 jobs:
   test-unittests:
+    environment:
+      PYPI_REPOSITORY: finance-pypi-$ARTIFACTORY_ENV
+      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/$PYPI_REPOSITORY
     docker:
       - image: cimg/python:3.10.2
     working_directory: ~/project
@@ -19,14 +22,14 @@ jobs:
       - checkout
       - run:
           name: Download dependencies
-          command: pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-dev/simple
+          command: pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
       - run:
           name: init .pypirc
           command: |
             echo -e "[distutils]" >> ~/.pypirc
-            echo -e "index-servers = finance-pypi-dev" >> ~/.pypirc
-            echo -e "[finance-pypi-dev]" >> ~/.pypirc
-            echo -e "repository: https://monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-dev" >> ~/.pypirc
+            echo -e "index-servers = $PYPI_REPOSITORY" >> ~/.pypirc
+            echo -e "[$PYPI_REPOSITORY]" >> ~/.pypirc
+            echo -e "repository: https://$PYPI_REPOSITORY_URL" >> ~/.pypirc
             echo -e "username: $ARTIFACTORY_USER" >> ~/.pypirc
             echo -e "password: $ARTIFACTORY_API_KEY" >> ~/.pypirc
       - run:
@@ -34,4 +37,4 @@ jobs:
           command: python3 setup.py bdist_wheel
       - run:
           name: Publish
-          command: twine upload -r finance-pypi-dev dist/*
+          command: twine upload -r $PYPI_REPOSITORY dist/*
