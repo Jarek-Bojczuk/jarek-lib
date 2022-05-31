@@ -9,17 +9,17 @@ workflows:
     jobs:
     - test-unittests:
         context: circleci-build-context
-        env: sss
+        repo-env: dev
 
 jobs:
   test-unittests:
     parameters:
-      env:
+      repo-env:
         type: string
         default: dev
     environment:
       PYPI_REPOSITORY: finance-pypi-<< parameters.env >>
-      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.env >>
+      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.repo-env >>
     docker:
       - image: cimg/python:3.10.2
     working_directory: ~/project
