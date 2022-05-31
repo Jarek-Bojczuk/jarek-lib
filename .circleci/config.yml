@@ -13,8 +13,8 @@ workflows:
 jobs:
   test-unittests:
     environment:
-      PYPI_REPOSITORY: finance-pypi-${ARTIFACTORY_ENV}
-      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/$PYPI_REPOSITORY
+      PYPI_REPOSITORY: finance-pypi-dev
+      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/${PYPI_REPOSITORY}
     docker:
       - image: cimg/python:3.10.2
     working_directory: ~/project
