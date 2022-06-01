@@ -41,6 +41,8 @@ jobs:
       - run:
           name: Build and Publish
           command: |
+            git config --global user.name "Jarek-Bojczuk"
+            git config --global user.email "jarek.bojczuk@crypto.com"
             chmod 755 ./deploy.sh
             make deploy
       #- run:
