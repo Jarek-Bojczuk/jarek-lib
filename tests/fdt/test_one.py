@@ -16,4 +16,4 @@ class FirstTest(unittest.TestCase):
     def test_second_test_case(self):
         print('Transformation test')
         res = my_first_lib_method()
-        self.assertEqual(res, "my_first_lib_method1")
+        self.assertEqual(res, "my_first_lib_method")
