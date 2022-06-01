@@ -61,13 +61,13 @@ jobs:
           name: Run tests
           command: |
             python3 -m pytest --junitxml=tests/reports/pytest.xml --cov-report=xml:tests/reports/coverage.xml --cov=./ -sv --html tests/reports/report.html
-            coverage xml -o tests/reports/coverage.xml
-            mkdir -p test-results/junit
-            mkdir -p test-results/coverage
-            cp tests/reports/report.html test-results/junit/
-            cp -r tests/reports/assets test-results/junit/
-            cp tests/reports/pytest.xml test-results/junit/
-            cp -r tests/reports/coverage.xml test-results/coverage/
+            coverage xml -o ./tests/reports/coverage.xml
+            mkdir -p ./test-results/junit
+            mkdir -p ./test-results/coverage
+            cp tests/reports/report.html ./test-results/junit/
+            cp -r tests/reports/assets ./test-results/junit/
+            cp tests/reports/pytest.xml ./test-results/junit/
+            cp -r tests/reports/coverage.xml ./test-results/coverage/
       - store_artifacts:
           path: ./test-result
       - store_test_results:
