@@ -25,6 +25,15 @@ workflows:
         repo-env: dev
         requires:
           - minor_hold
+    - major_hold:
+        type: approval
+        context: circleci-build-context
+    - build_and_push:
+        context: circleci-build-context
+        push_type: major
+        repo-env: dev
+        requires:
+          - major_hold
 
 jobs:
   build_and_push:
@@ -61,6 +70,9 @@ jobs:
           command: |
             chmod 755 ./deploy.sh
             make deploy
+      - store_artifacts:
+          name: Store results
+          path: .
       #- run:
       #    name: Build library
       #    command: python3 setup.py bdist_wheel
