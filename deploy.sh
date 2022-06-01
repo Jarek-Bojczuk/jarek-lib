@@ -1,7 +1,7 @@
 #!/bin/bash
 
-git config --global user.name "Jarek-Bojczuk"
-git config --global user.email "jarek.bojczuk@crypto.com"
+git config --global user.name "FDT-CI"
+git config --global user.email "fdt@crypto.com"
 
 TAG=$(git tag | sort --version-sort | tail -n1)
 echo $TAG
