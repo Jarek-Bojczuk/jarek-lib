@@ -29,9 +29,6 @@ jobs:
       - image: cimg/python:3.10.2
     working_directory: ~/project
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "91:f5:2b:8f:a7:6c:66:ab:5f:fa:16:52:e6:cb:ea:15"
       - checkout
       - run:
           name: Install CI dependencies
