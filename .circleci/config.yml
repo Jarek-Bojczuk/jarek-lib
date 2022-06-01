@@ -10,8 +10,18 @@ workflows:
     - patch_hold:
         type: approval
         context: circleci-build-context
-    - patch_push:
+    - build_and_push:
         context: circleci-build-context
+        push_type: patch
+        repo-env: dev
+        requires:
+          - patch_hold
+    - minor_hold:
+        type: approval
+        context: circleci-build-context
+    - build_and_push:
+        context: circleci-build-context
+        push_type: minor
         repo-env: dev
         requires:
           - patch_hold
@@ -19,10 +29,13 @@ workflows:
 jobs:
   patch_push:
     parameters:
+      push_type:
+        type: string
       repo-env:
         type: string
         default: dev
     environment:
+      PUSH_TYPE: <<parameters.push_type >>
       PYPI_REPOSITORY: finance-pypi-<< parameters.repo-env >>
       PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.repo-env >>
     docker:

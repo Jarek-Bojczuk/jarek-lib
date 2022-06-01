@@ -5,6 +5,7 @@ git config --global user.email "fdt@crypto.com"
 
 TAG=$(git tag | sort --version-sort | tail -n1)
 echo $TAG
+echo $PUSH_TYPE
 
 GIT_TAG=$(expr "0.0."$(echo $CIRCLE_BUILD_NUM))
 
