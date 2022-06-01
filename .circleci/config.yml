@@ -40,7 +40,9 @@ jobs:
             cat ~/.pypirc
       - run:
           name: Build and Publish
-          command: make deploy
+          command: |
+            chmod 755 ./deploy.sh
+            make deploy
       #- run:
       #    name: Build library
       #    command: python3 setup.py bdist_wheel
