@@ -1,7 +1,7 @@
 #!/bin/bash
 
-git config --global user.name "fdt-robot"
-git config --global user.email "fdt@crypto.com"
+git config --global user.name "Jarek-Bojczuk"
+git config --global user.email "jarek.bojczuk@crypto.com"
 
 GIT_TAG=$(expr "0.0."$(echo $CIRCLE_BUILD_NUM))
 
