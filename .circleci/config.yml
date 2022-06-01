@@ -24,10 +24,10 @@ workflows:
         push_type: minor
         repo-env: dev
         requires:
-          - patch_hold
+          - minor_hold
 
 jobs:
-  patch_push:
+  build_and_push:
     parameters:
       push_type:
         type: string
