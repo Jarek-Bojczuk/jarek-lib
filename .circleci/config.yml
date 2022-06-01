@@ -5,14 +5,19 @@ orbs:
 
 workflows:
   version: 2
-  test-build-run:
+  build_and_push:
     jobs:
-    - test-unittests:
+    - patch_hold:
+        type: approval
+        context: circleci-build-context
+    - patch_push:
         context: circleci-build-context
         repo-env: dev
+        requires:
+          - patch_hold
 
 jobs:
-  test-unittests:
+  patch_push:
     parameters:
       repo-env:
         type: string
