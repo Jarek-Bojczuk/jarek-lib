@@ -61,7 +61,6 @@ jobs:
           name: Run tests
           command: |
             python3 -m pytest --junitxml=./test-results/pytests.xml --cov=./ --cov-report=xml:./test-results/coverage.xml -sv --html ./test-results/report.html
-            coverage xml -o ./test-results/coverage.xml
       #- store_artifacts:
       #    path: ./test-results
       - store_test_results:
