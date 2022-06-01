@@ -54,7 +54,17 @@ jobs:
       - checkout
       - run:
           name: Install CI dependencies
-          command: pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
+          command: |
+            pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
+            pip install -r requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
+      - run:
+          name: Run tests
+          command:
+            python3 -m pytest --cov-report=xml:./test-result/cov.xml --cov=./  --html ./test-result/report.html
+      - store_artifacts:
+          path: ./test-result
+      - store_test_results:
+          path: ./test-result
       - run:
           name: init .pypirc
           command: |
@@ -70,9 +80,6 @@ jobs:
           command: |
             chmod 755 ./deploy.sh
             make deploy
-      - store_artifacts:
-          name: Store results
-          path: .
       #- run:
       #    name: Build library
       #    command: python3 setup.py bdist_wheel
