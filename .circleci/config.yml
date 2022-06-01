@@ -60,7 +60,7 @@ jobs:
       - run:
           name: Run tests
           command:
-            python3 -m pytest --cov-report=xml:./test-result/cov.xml --cov=./  --html ./test-result/report.html
+            python3 -m pytest --cov-report=xml:./test-result/coverage/coverage.xml --cov=./  --html ./test-result/junit/report.html
       - store_artifacts:
           path: ./test-result
       - store_test_results:
