@@ -26,7 +26,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Download dependencies
+          name: Install CI dependencies
           command: pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
       - run:
           name: init .pypirc
@@ -39,8 +39,11 @@ jobs:
             echo -e "password: $ARTIFACTORY_API_KEY" >> ~/.pypirc
             cat ~/.pypirc
       - run:
-          name: Build library
-          command: python3 setup.py bdist_wheel
-      - run:
-          name: Publish
-          command: twine upload -r $PYPI_REPOSITORY dist/*
+          name: Build and Publish
+          command: make deploy
+      #- run:
+      #    name: Build library
+      #    command: python3 setup.py bdist_wheel
+      #- run:
+      #    name: Publish
+      #    command: twine upload -r $PYPI_REPOSITORY dist/*

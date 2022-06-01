@@ -13,7 +13,7 @@ with open(path.join(PATH, 'requirements.txt'), encoding='utf-8') as req_file:
 
 setuptools.setup(
     name="python-jarek-fdt-ci",
-    version="0.0.1",
+    version=os.environ['GIT_TAG'],
     author="Finance Tech",
     author_email="jarek.bojczuk@crypto.com",
     description="Test for a python library.",
