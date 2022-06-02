@@ -10,49 +10,39 @@ workflows:
     - test:
         context: circleci-build-context
         repo-env: dev
-    - hold:
+    - hold_patch:
         type: approval
         context: circleci-build-context
         requires:
           - test
-    - build_and_push:
+    - build_and_push_patch:
         context: circleci-build-context
         push_type: patch
         repo-env: dev
         requires:
-          - hold
-  build_and_push_minor:
-    jobs:
-    - test:
-        context: circleci-build-context
-        repo-env: dev
-    - hold:
+          - hold_patch
+    - hold_minor:
         type: approval
         context: circleci-build-context
         requires:
           - test
-    - build_and_push:
+    - build_and_push_minor:
         context: circleci-build-context
         push_type: minor
         repo-env: dev
         requires:
-          - hold
-  build_and_push_major:
-    jobs:
-    - test:
-        context: circleci-build-context
-        repo-env: dev
-    - hold:
+          - hold_minor
+    - hold_major:
         type: approval
         context: circleci-build-context
         requires:
           - test
-    - build_and_push:
+    - build_and_push_major:
         context: circleci-build-context
         push_type: major
         repo-env: dev
         requires:
-          - hold
+          - hold_major
 
 jobs:
   test:
@@ -87,7 +77,7 @@ jobs:
       - run:
           name: Install wheel package
           command: |
-            pip install ./dist/python_jarek_fdt_ci-0.5.0-py3-none-any.whl \
+            pip install ./dist/python_jarek_fdt_ci-0.0.0-py3-none-any.whl \
             --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
   build_and_push:
     parameters:
