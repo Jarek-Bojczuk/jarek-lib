@@ -15,7 +15,7 @@ workflows:
         context: circleci-build-context
         requires:
           - test
-    - build_and_push_patch:
+    - build_and_push:
         context: circleci-build-context
         push_type: patch
         repo-env: dev
@@ -26,7 +26,7 @@ workflows:
         context: circleci-build-context
         requires:
           - test
-    - build_and_push_minor:
+    - build_and_push:
         context: circleci-build-context
         push_type: minor
         repo-env: dev
@@ -37,7 +37,7 @@ workflows:
         context: circleci-build-context
         requires:
           - test
-    - build_and_push_major:
+    - build_and_push:
         context: circleci-build-context
         push_type: major
         repo-env: dev
