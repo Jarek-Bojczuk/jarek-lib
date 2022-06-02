@@ -60,8 +60,8 @@ jobs:
       repo-env:
         type: string
         default: dev
-      environment:
-        PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.repo-env >>
+    environment:
+      PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.repo-env >>
     docker:
       - image: cimg/python:3.10.2
     steps:
