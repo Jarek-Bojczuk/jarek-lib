@@ -110,9 +110,3 @@ jobs:
           command: |
             chmod 755 ./publish.sh
             make publish
-      #- run:
-      #    name: Build library
-      #    command: python3 setup.py bdist_wheel
-      #- run:
-      #    name: Publish
-      #    command: twine upload -r $PYPI_REPOSITORY dist/*
