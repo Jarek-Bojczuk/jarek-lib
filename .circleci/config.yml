@@ -5,37 +5,90 @@ orbs:
 
 workflows:
   version: 2
-  build_and_push:
+  build_and_push_patch:
     jobs:
-    - patch_hold:
+    - test:
+        context: circleci-build-context
+        repo-env: dev
+    - hold:
         type: approval
         context: circleci-build-context
+        requires:
+          - test
     - build_and_push:
         context: circleci-build-context
         push_type: patch
         repo-env: dev
-        #requires:
-        #  - patch_hold
-    - minor_hold:
+        requires:
+          - hold
+  build_and_push_minor:
+    jobs:
+    - test:
+        context: circleci-build-context
+        repo-env: dev
+    - hold:
         type: approval
         context: circleci-build-context
+        requires:
+          - test
     - build_and_push:
         context: circleci-build-context
         push_type: minor
         repo-env: dev
         requires:
-          - minor_hold
-    - major_hold:
+          - hold
+  build_and_push_major:
+    jobs:
+    - test:
+        context: circleci-build-context
+        repo-env: dev
+    - hold:
         type: approval
         context: circleci-build-context
+        requires:
+          - test
     - build_and_push:
         context: circleci-build-context
         push_type: major
         repo-env: dev
         requires:
-          - major_hold
+          - hold
 
 jobs:
+  test:
+    parameters:
+      repo-env:
+        type: string
+        default: dev
+      environment:
+        PYPI_REPOSITORY_URL: monacohq.jfrog.io/artifactory/api/pypi/finance-pypi-<< parameters.repo-env >>
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
+            pip install -r requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
+      - run:
+          name: Run tests
+          command: |
+            python -m pytest --junitxml=./test-results/pytests.xml --cov=./ --cov-report=xml:./test-results/coverage.xml -sv --html ./test-results/report.html
+      - store_artifacts:
+          path: ./test-results
+      - store_test_results:
+          path: ./test-results
+      - run:
+          name: Create wheel dist
+          command: |
+            export GIT_TAG=0.0.0
+            python setup.py bdist_wheel
+      - run:
+          name: Install wheel package
+          command: |
+            pip install ./dist/python_jarek_fdt_ci-0.5.0-py3-none-any.whl \
+            --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
   build_and_push:
     parameters:
       push_type:
@@ -53,19 +106,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies
-          command: |
-            pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
-            pip install -r requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL/simple
-      - run:
-          name: Run tests
-          command: |
-            python -m pytest --junitxml=./test-results/pytests.xml --cov=./ --cov-report=xml:./test-results/coverage.xml -sv --html ./test-results/report.html
-      - store_artifacts:
-          path: ./test-results
-      - store_test_results:
-          path: ./test-results
-      - run:
           name: init .pypirc
           command: |
             echo -e "[distutils]" >> ~/.pypirc
@@ -78,8 +118,8 @@ jobs:
       - run:
           name: Build and Publish
           command: |
-            chmod 755 ./deploy.sh
-            make deploy
+            chmod 755 ./publish.sh
+            make publish
       #- run:
       #    name: Build library
       #    command: python3 setup.py bdist_wheel

@@ -1,2 +1,2 @@
-deploy:
-	./deploy.sh
+publish:
+	./publish.sh
