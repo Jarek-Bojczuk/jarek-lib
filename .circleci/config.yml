@@ -96,6 +96,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            pip install -r ci-requirements.txt --extra-index-url https://${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}@$PYPI_REPOSITORY_URL
+      - run:
           name: init .pypirc
           command: |
             echo -e "[distutils]" >> ~/.pypirc
